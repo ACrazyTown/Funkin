@@ -88,7 +88,7 @@ class Main extends Sprite
     if (context != WEBGL && context != OPENGL && context != OPENGLES)
     {
       var tech:String = #if web "WebGL" #elseif desktop "OpenGL" #else "OpenGL ES" #end;
-      var requiredVersion:String = #if web '$tech 1.0 or newer' #elseif desktop '$tech 3.0 or newer' #else '$tech 2.0 or newer' #end;
+      var requiredVersion:String = #if lime_webgl '$tech 1.0 or newer' #elseif (lime_opengl || lime_opengles) '$tech 2.0 or newer' #end;
       var desc:String = 'Failed to initialize the $tech rendering context!\n\n';
       #if web
       desc += 'Make sure your graphics card supports $requiredVersion, your graphics drivers are up to date, and hardware acceleration is enabled on your browser.';
