@@ -523,7 +523,7 @@ class GameOverSubState extends MusicBeatSubState
     {
       if (gameOverMusic != null) gameOverMusic.stop();
 
-      gameOverMusic = FunkinSound.load(musicPath);
+      gameOverMusic = FunkinSound._load(musicPath);
       if (gameOverMusic == null) return;
 
       gameOverMusic.volume = startingVolume;

@@ -38,7 +38,7 @@ using funkin.graphics.framebuffer.BitmapDataUtil;
  *   - COLOR
  *   - LUMINOSITY
  */
-@:nullSafety @:access(openfl.display.DisplayObject) @:access(openfl.display.BitmapData) @:access(openfl.display3D.Context3D) @:access(openfl.display3D.textures.TextureBase) @:access(flixel.graphics.FlxGraphic) @:access(flixel.graphics.frames.FlxFrame) @:access(openfl.display.OpenGLRenderer) @:access(openfl.geom.ColorTransform)
+@:nullSafety(Off) @:access(openfl.display.DisplayObject) @:access(openfl.display.BitmapData) @:access(openfl.display3D.Context3D) @:access(openfl.display3D.textures.TextureBase) @:access(flixel.graphics.FlxGraphic) @:access(flixel.graphics.frames.FlxFrame) @:access(openfl.display.OpenGLRenderer) @:access(openfl.geom.ColorTransform)
 class FunkinCamera extends FlxCamera
 {
   /**
@@ -113,16 +113,16 @@ class FunkinCamera extends FlxCamera
 
     this.id = id;
 
-    _backgroundFrame = new FlxFrame(new FlxGraphic('', null));
-    _backgroundFrame.frame = new FlxRect();
+    // _backgroundFrame = new FlxFrame(new FlxGraphic('', null));
+    // _backgroundFrame.frame = new FlxRect();
 
-    _blendShader = new RuntimeCustomBlendShader();
+    // _blendShader = new RuntimeCustomBlendShader();
 
-    _backgroundRenderTexture = new RenderTexture(this.width, this.height);
-    _blendRenderTexture = new RenderTexture(this.width, this.height);
+    // _backgroundRenderTexture = new RenderTexture(this.width, this.height);
+    // _blendRenderTexture = new RenderTexture(this.width, this.height);
 
-    _cameraMatrix = new FlxMatrix();
-    _cameraTexture = FixedBitmapData.create(this.width, this.height);
+    // _cameraMatrix = new FlxMatrix();
+    // _cameraTexture = FixedBitmapData.create(this.width, this.height);
 
     crossCameraBlending = false;
   }
@@ -130,7 +130,8 @@ class FunkinCamera extends FlxCamera
   override function drawPixels(?frame:FlxFrame, ?pixels:BitmapData, matrix:FlxMatrix, ?transform:ColorTransform, ?blend:BlendMode, ?smoothing:Bool = false,
       ?shader:FlxShader):Void
   {
-    var shouldUseShader:Bool = (!hasKhronosExtension && KHR_BLEND_MODES.contains(blend)) || SHADER_REQUIRED_BLEND_MODES.contains(blend);
+    // var shouldUseShader:Bool = (!hasKhronosExtension && KHR_BLEND_MODES.contains(blend)) || SHADER_REQUIRED_BLEND_MODES.contains(blend);
+    var shouldUseShader = false;
 
     // Fallback to the shader implementation if the device doesn't support `KHR_blend_equation_advanced`, or if
     // the specified blend mode requires the shader.
@@ -284,9 +285,9 @@ class FunkinCamera extends FlxCamera
   {
     super.destroy();
 
-    _blendRenderTexture.destroy();
-    _backgroundRenderTexture.destroy();
+    // _blendRenderTexture.destroy();
+    // _backgroundRenderTexture.destroy();
 
-    _cameraTexture.dispose();
+    // _cameraTexture.dispose();
   }
 }

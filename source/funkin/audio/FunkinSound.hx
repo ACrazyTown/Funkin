@@ -23,7 +23,7 @@ import openfl.media.SoundMixer;
  * - Delayed playback via negative song position.
  * - Easy functions for immediate playback and recycling.
  */
-@:nullSafety
+@:nullSafety(Off)
 class FunkinSound extends FlxSound implements ICloneable<FunkinSound>
 {
   static final MAX_VOLUME:Float = 1.0;
@@ -49,7 +49,7 @@ class FunkinSound extends FlxSound implements ICloneable<FunkinSound>
   }
 
   /**
-   * Using `FunkinSound.load` will override a dead instance from here rather than creating a new one, if possible!
+   * Using `FunkinSound._load` will override a dead instance from here rather than creating a new one, if possible!
    */
   static var pool(default, null):FlxTypedGroup<FunkinSound> = new FlxTypedGroup<FunkinSound>();
 
@@ -369,7 +369,7 @@ class FunkinSound extends FlxSound implements ICloneable<FunkinSound>
     }
     else
     {
-      var music = FunkinSound.load(pathToUse, params?.startingVolume ?? 1.0, params.loop ?? true, false, true, params.persist ?? false, params.onComplete);
+      var music = FunkinSound._load(pathToUse, params?.startingVolume ?? 1.0, params.loop ?? true, false, true, params.persist ?? false, params.onComplete);
       if (music != null)
       {
         setMusic(music);
@@ -424,7 +424,7 @@ class FunkinSound extends FlxSound implements ICloneable<FunkinSound>
    * @param important       If `true`, the sound channel will forcefully be added onto the channel array, even if full. Use sparingly!
    * @return A `FunkinSound` object, or `null` if the sound could not be loaded.
    */
-  public static function load(embeddedSound:FlxSoundAsset, volume:Float = 1.0, looped:Bool = false, autoDestroy:Bool = false, autoPlay:Bool = false,
+  public static function _load(embeddedSound:FlxSoundAsset, volume:Float = 1.0, looped:Bool = false, autoDestroy:Bool = false, autoPlay:Bool = false,
       persist:Bool = false, ?onComplete:Void->Void, ?onLoad:Void->Void, important:Bool = false):Null<FunkinSound>
   {
     @:privateAccess
@@ -442,7 +442,7 @@ class FunkinSound extends FlxSound implements ICloneable<FunkinSound>
 
     if (embeddedSound is String)
     {
-      sound._label = embeddedSound;
+      sound._label = cast embeddedSound;
     }
     else
     {
@@ -506,7 +506,7 @@ class FunkinSound extends FlxSound implements ICloneable<FunkinSound>
 
       soundRequest.future.onComplete(function(partialSound)
       {
-        var snd = FunkinSound.load(partialSound, volume, looped, autoDestroy, autoPlay, false, onComplete, onLoad);
+        var snd = FunkinSound._load(partialSound, volume, looped, autoDestroy, autoPlay, false, onComplete, onLoad);
         promise.complete(snd);
       });
     }
@@ -569,7 +569,7 @@ class FunkinSound extends FlxSound implements ICloneable<FunkinSound>
    */
   public static function playOnce(key:String, volume:Float = 1.0, ?onComplete:Void->Void, ?onLoad:Void->Void, important:Bool = false):Null<FunkinSound>
   {
-    var result:Null<FunkinSound> = FunkinSound.load(key, volume, false, true, true, false, onComplete, onLoad, important);
+    var result:Null<FunkinSound> = FunkinSound._load(key, volume, false, true, true, false, onComplete, onLoad, important);
     return result;
   }
 

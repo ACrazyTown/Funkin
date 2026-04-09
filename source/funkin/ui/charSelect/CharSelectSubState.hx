@@ -7,7 +7,7 @@ import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxMath;
 import flixel.math.FlxPoint;
 import flixel.sound.FlxSound;
-import flixel.system.debug.watch.Tracker.TrackerProfile;
+// import flixel.system.debug.watch.Tracker.TrackerProfile;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxTimer;
@@ -294,14 +294,14 @@ class CharSelectSubState extends MusicBeatSubState
 
     nametag.scrollFactor.set();
 
-    FlxG.debugger.addTrackerProfile(new TrackerProfile(FunkinSprite, [
-      'x',
-      'y',
-      'alpha',
-      'scale',
-      'blend'
-    ]));
-    FlxG.debugger.addTrackerProfile(new TrackerProfile(FlxSound, ['pitch', 'volume']));
+    // FlxG.debugger.addTrackerProfile(new TrackerProfile(FunkinSprite, [
+    //   'x',
+    //   'y',
+    //   'alpha',
+    //   'scale',
+    //   'blend'
+    // ]));
+    // FlxG.debugger.addTrackerProfile(new TrackerProfile(FlxSound, ['pitch', 'volume']));
 
     add(cursors);
 
@@ -350,8 +350,8 @@ class CharSelectSubState extends MusicBeatSubState
       FlxTween.tween(member, {y: member.y - 300}, 1, {ease: FlxEase.expoOut});
     }
 
-    FlxG.debugger.addTrackerProfile(new TrackerProfile(CharSelectSubState, ['curChar', 'grpXSpread', 'grpYSpread']));
-    FlxG.debugger.track(this);
+    // FlxG.debugger.addTrackerProfile(new TrackerProfile(CharSelectSubState, ['curChar', 'grpXSpread', 'grpYSpread']));
+    // FlxG.debugger.track(this);
 
     add(camFollow);
     camFollow.screenCenter();
@@ -488,7 +488,7 @@ class CharSelectSubState extends MusicBeatSubState
   {
     add(grpIcons);
 
-    FlxG.debugger.addTrackerProfile(new TrackerProfile(FlxSpriteGroup, ['x', 'y']));
+    // FlxG.debugger.addTrackerProfile(new TrackerProfile(FlxSpriteGroup, ['x', 'y']));
 
     for (i in 0...9)
     {

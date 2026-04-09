@@ -20,6 +20,6 @@ class SoundUtil
 
     var openflSound:OpenFLSound = OpenFLSound.fromAudioBuffer(AudioBuffer.fromBytes(input));
     if (openflSound == null) return null;
-    return FunkinSound.load(openflSound, 1.0, false);
+    return FunkinSound._load(openflSound, 1.0, false);
   }
 }

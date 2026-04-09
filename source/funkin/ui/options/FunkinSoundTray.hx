@@ -124,8 +124,8 @@ class FunkinSoundTray extends FlxSoundTray
     if (!silent)
     {
       // This is a String currently, but there is or was a Flixel PR to change this to a FlxSound or a Sound bject
-      var sound:Null<String> = FlxG.sound.volume == 1 ? volumeMaxSound : (up ? volumeUpSound : volumeDownSound);
-      if (sound != null) FlxG.sound.play(sound);
+      // var sound:Null<String> = FlxG.sound.volume == 1 ? volumeMaxSound : (up ? volumeUpSound : volumeDownSound);
+      // if (sound != null) FlxG.sound.play(sound);
     }
   }
 
@@ -142,8 +142,9 @@ class FunkinSoundTray extends FlxSoundTray
 
   function updateBars():Void
   {
-    var globalVolume:Int = FlxG.sound.muted || FlxG.sound.volume == 0 ? 0 : Math.round(FlxG.sound.logToLinear(FlxG.sound.volume) * 10);
+    // var globalVolume:Int = FlxG.sound.muted || FlxG.sound.volume == 0 ? 0 : Math.round(FlxG.sound.logToLinear(FlxG.sound.volume) * 10);
 
+    var globalVolume = 1.0;
     for (i in 0..._bars.length) _bars[i].visible = i < globalVolume;
   }
 

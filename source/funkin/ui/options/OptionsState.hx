@@ -55,7 +55,7 @@ class OptionsState extends MusicBeatState
 
     persistentUpdate = true;
 
-    drumsBG = FunkinSound.load(Paths.music('offsetsLoop/drumsLoop'), 0, true, false, false, false);
+    drumsBG = FunkinSound._load(Paths.music('offsetsLoop/drumsLoop'), 0, true, false, false, false);
 
     var menuBG = new FlxSprite().loadGraphic(Paths.image('menuBG'));
     var hsv = new HSVShader(-0.6, 0.9, 3.6);

@@ -54,7 +54,7 @@ import funkin.util.DeviceUtil;
 /**
  * The state for the results screen after a song or week is finished.
  */
-@:nullSafety
+@:nullSafety(Off)
 class ResultState extends MusicBeatSubState
 {
   final params:ResultsStateParams;
@@ -510,10 +510,10 @@ class ResultState extends MusicBeatSubState
 
         // preload the loop music
         @:nullSafety(Off)
-        var musicLoop:FunkinSound = FunkinSound.load(mainMusic, 1.0, true, true, false, false, null, null, true);
+        var musicLoop:FunkinSound = FunkinSound._load(mainMusic, 1.0, true, true, false, false, null, null, true);
 
         // Play the intro music.
-        introMusicAudio = FunkinSound.load(introMusic, 1.0, false, true, true, () ->
+        introMusicAudio = FunkinSound._load(introMusic, 1.0, false, true, true, () ->
         {
           introMusicAudio = null;
           musicLoop.play();
@@ -535,7 +535,8 @@ class ResultState extends MusicBeatSubState
         });
         else
         {
-          resultsMusic = FunkinSound.load(Paths.music(getMusicPath(playerCharacter, rank) + '/' + getMusicPath(playerCharacter, rank)), 1.0, true, false, true);
+          resultsMusic = FunkinSound._load(Paths.music(getMusicPath(playerCharacter, rank) + '/' + getMusicPath(playerCharacter, rank)), 1.0, true, false,
+            true);
         }
       }
     });

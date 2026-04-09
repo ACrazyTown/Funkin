@@ -370,7 +370,7 @@ class PauseSubState extends MusicBeatSubState
   function startPauseMusic():Void
   {
     var pauseMusicPath:String = Paths.music('breakfast$musicSuffix/breakfast$musicSuffix');
-    pauseMusic = FunkinSound.load(pauseMusicPath, 0, true, true);
+    pauseMusic = FunkinSound._load(pauseMusicPath, 0, true, true);
 
     if (pauseMusic == null)
     {
