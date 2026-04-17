@@ -12,6 +12,7 @@ import animate.internal.FilterRenderer;
 /**
  * A helper for rendering filters on `FunkinSprite` instances.
  */
+@:nullSafety(Off)
 @:access(animate.FlxAnimate) @:access(openfl.filters.BitmapFilter) @:access(animate.internal.FilterRenderer) @:access(openfl.display.OpenGLRenderer) @:access(openfl.geom.ColorTransform) @:access(openfl.display.BitmapData) @:nullSafety
 class FunkinFilterRenderer implements IFlxDestroyable
 {

@@ -202,6 +202,8 @@ class Main extends Sprite
     #else
     trace('hxcpp_debug_server is disabled! This build does not support debugging.');
     #end
+
+    trace(flixel.FlxG.stage.context3D.driverInfo);
   }
 
   #if FEATURE_HAXEUI
