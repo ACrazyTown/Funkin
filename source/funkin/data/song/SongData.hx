@@ -452,6 +452,13 @@ class SongPlayData implements ICloneable<SongPlayData>
   public var album:Null<String>;
 
   /**
+   * An external image link for the opponent's health icon.
+   * This is used for Discord Rich Presence.
+   */
+  @:optional
+  public var discordRPCImage:String;
+
+  /**
    * The sticker pack for the song to use during transitions.
    * If `null`, display the character's sticker pack.
    */
@@ -694,7 +701,7 @@ class SongEventDataRaw implements ICloneable<SongEventDataRaw>
    * This can allow the event to include information used for custom behavior.
    * Data type depends on the event kind. It can be anything that's JSON serializable.
    */
-  @:alias("v") @:optional @:jcustomparse(funkin.data.DataParse.dynamicValue) @:jcustomwrite(funkin.data.DataWrite.dynamicValue)
+  @:alias("v") @:optional
   public var value:Dynamic = null;
 
   /**
@@ -1413,7 +1420,7 @@ class NoteParamData implements ICloneable<NoteParamData>
 {
   @:alias("n")
   public var name:String;
-  @:alias("v") @:jcustomparse(funkin.data.DataParse.dynamicValue) @:jcustomwrite(funkin.data.DataWrite.dynamicValue)
+  @:alias("v")
   public var value:Dynamic;
 
   public function new(name:String, value:Dynamic)

@@ -49,6 +49,6 @@ class MouseUtil
    */
   public static function mouseWheelZoom():Void
   {
-    if (FlxG.mouse.wheel != 0) FlxG.camera.zoom += FlxG.mouse.wheel * (0.1 * FlxG.camera.zoom);
+    if (FlxG.mouse.wheel != 0) FlxG.camera.zoom += FlxG.mouse.deltaWheel.y * (0.1 * FlxG.camera.zoom);
   }
 }

@@ -738,7 +738,7 @@ class FunkinSprite extends FlxAnimate
   }
 
   /**
-   * Ensure scale is applied when cloning a sprite.R
+   * Ensure scale is applied when cloning a sprite.
    * The default `clone()` method acts kinda weird TBH.
    * @return A clone of this sprite.
    */
@@ -874,7 +874,15 @@ class FunkinSprite extends FlxAnimate
     #if !flash
     if (willUseRenderTexture)
     {
-      if (_renderTexture == null) _renderTexture = new RenderTexture(Math.ceil(bounds.width), Math.ceil(bounds.height));
+      if (_renderTexture == null)
+      {
+        _renderTexture = new RenderTexture(Math.ceil(bounds.width), Math.ceil(bounds.height));
+
+        // Replace the render texture's camera with a FunkinCamera
+        // This allows the blend shader to work inside the render texture!
+        @:privateAccess
+        _renderTexture._camera = new FunkinCamera('', 0, 0, Math.ceil(bounds.width), Math.ceil(bounds.height));
+      }
 
       if (_renderTextureDirty)
       {

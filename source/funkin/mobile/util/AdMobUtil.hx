@@ -5,8 +5,7 @@ import extension.admob.Admob;
 import extension.admob.AdmobBannerAlign;
 import extension.admob.AdmobBannerSize;
 import extension.admob.AdmobEvent;
-import flixel.FlxG;
-import funkin.play.cutscene.VideoCutscene;
+import lime.media.AudioManager;
 
 /**
  * Provides utility functions for working with admob advertisements.
@@ -83,23 +82,15 @@ class AdMobUtil
 
             Admob.startInterstitialPreloader(AdMobUtil.ADMOB_INTERSTITIAL_PRELOAD_ID, adUnitID, AdMobUtil.ADMOB_INTERSTITIAL_PRELOAD_BUFFER_SIZE);
           }
-        #if ios
-        case AdmobEvent.INTERSTITIAL_LOADED:
-          lime.media.AudioManager.suspend();
+        case AdmobEvent.INTERSTITIAL_SHOWED:
+          AudioManager.suspend();
         case AdmobEvent.INTERSTITIAL_DISMISSED:
-          lime.media.AudioManager.resume();
-        #end
+          AudioManager.resume();
         default:
       }
 
       Sys.println(event.toString());
     });
-
-    Admob.configureUnity(Admob.getTCFConsentForPurpose(0) == 1, StringTools.startsWith(Admob.getUSPrivacy(), '1Y'));
-
-    Admob.configurePangle(Admob.getTCFConsentForPurpose(0) == 1, StringTools.startsWith(Admob.getUSPrivacy(), '1Y'));
-
-    Admob.configureVungle(StringTools.startsWith(Admob.getUSPrivacy(), '1Y'));
 
     Admob.init(#if TESTING_ADS true #else false #end);
   }
@@ -212,41 +203,6 @@ class AdMobUtil
   public static inline function setVolume(volume:Float):Void
   {
     Admob.setVolume(volume);
-  }
-
-  /**
-   * Checks whether consent for a specific advertising purpose has been granted.
-   * @param purpose The purpose for which consent is required.
-   * @return An Int indicating consent status (-1 for no consent, 1 for granted).
-   */
-  public static inline function getTCFConsentForPurpose(purpose:Int):Int
-  {
-    return Admob.getTCFConsentForPurpose(purpose);
-  }
-
-  /**
-   * Checks if the user has given consent for all ad purposes.
-   * This is typically required for GDPR compliance, where each purpose (0-9) needs to be individually consented.
-   * @return Bool indicating whether the user has consented to all purposes.
-   */
-  public static function hasFullTCFConsent():Bool
-  {
-    for (purpose in 0...Admob.getTCFPurposeConsent().length)
-    {
-      if (Admob.getTCFConsentForPurpose(purpose) != 1) return false;
-    }
-
-    return true;
-  }
-
-  /**
-   * Retrieves the current user's consent status as a string.
-   * Useful for GDPR compliance to understand if ads can be personalized.
-   * @return A String with the consent status.
-   */
-  public static inline function getTCFPurposeConsent():String
-  {
-    return Admob.getTCFPurposeConsent();
   }
 
   /**

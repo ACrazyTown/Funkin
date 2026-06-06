@@ -550,14 +550,8 @@ class FreeplayState extends MusicBeatSubState
     charSelectHint.alignment = CENTER;
     charSelectHint.font = '5by7';
     charSelectHint.color = 0xFF5F5F5F;
-    #if FEATURE_TOUCH_CONTROLS
-    if (ControlsHandler.hasExternalInputDevice)
-      charSelectHint.text = 'Press [ ${controls.getDialogueNameFromControl(FREEPLAY_CHAR_SELECT, true)} ] to change characters';
-    else
-      charSelectHint.text = 'Tap the DJ to change characters';
-    #else
-    charSelectHint.text = 'Press [ ${controls.getDialogueNameFromControl(FREEPLAY_CHAR_SELECT, true)} ] to change characters';
-    #end
+    updateFreeplayHintText();
+
     if (!fromCharSelect)
     {
       charSelectHint.y -= 100;
@@ -1173,11 +1167,11 @@ class FreeplayState extends MusicBeatSubState
 
     new FlxTimer().start(0.1, _ ->
     {
+      capsuleToRank.fakeRanking.visible = false;
+      capsuleToRank.fakeBlurredRanking.visible = false;
+
       if (fromResults?.oldRank != null)
       {
-        capsuleToRank.fakeRanking.visible = false;
-        capsuleToRank.fakeBlurredRanking.visible = false;
-
         sparks.visible = true;
         sparksADD.visible = true;
         sparks.animation.play('sparks', true);
@@ -1759,18 +1753,11 @@ class FreeplayState extends MusicBeatSubState
     handleTouchSelectionScroll(elapsed);
     #end
 
-    #if FEATURE_TOUCH_CONTROLS
-    if (ControlsHandler.usingExternalInputDevice)
-      charSelectHint.text = 'Press [ ${controls.getDialogueNameFromControl(FREEPLAY_CHAR_SELECT, true)} ] to change characters';
-    else
-      charSelectHint.text = 'Tap the DJ to change characters';
-    #else
-    charSelectHint.text = 'Press [ ${controls.getDialogueNameFromControl(FREEPLAY_CHAR_SELECT, true)} ] to change characters';
-    #end
+    updateFreeplayHintText();
 
     handleDirectionalInput(elapsed);
 
-    final wheelAmount:Int = Std.int(FlxMath.bound(FlxG.mouse.wheel, -1, 1));
+    final wheelAmount:Int = Math.round(FlxMath.bound(FlxG.mouse.deltaWheel.y, -1, 1));
 
     if (wheelAmount != 0)
     {
@@ -2309,7 +2296,7 @@ class FreeplayState extends MusicBeatSubState
           // Continue playing this music between states, until a different music track gets played.
           persist: true
         });
-        FlxG.sound.music.fadeIn(4.0, 0.0, 1.0);
+        if (FlxG.sound.music != null) FlxG.sound.music.fadeIn(4.0, 0.0, 1.0);
         dispatchEvent(new FreeplayScriptEvent(FREEPLAY_CLOSE));
         close();
       }
@@ -3033,14 +3020,14 @@ class FreeplayState extends MusicBeatSubState
         {
           FlxG.sound.music.fadeIn(2, 0, previewVolume);
 
-          var fadeStart:Float = (FlxG.sound.music.length / 1000) - 2;
+          var fadeStart:Float = (FlxG.sound.music.length / Constants.MS_PER_SEC) - 2;
 
           previewTimers.push(new FlxTimer().start(fadeStart, function(_)
           {
             FlxG.sound.music.fadeOut(2, 0);
           }));
 
-          previewTimers.push(new FlxTimer().start(FlxG.sound.music.length / 1000, function(_)
+          previewTimers.push(new FlxTimer().start(FlxG.sound.music.length / Constants.MS_PER_SEC, function(_)
           {
             playCurSongPreview();
           }));
@@ -3146,6 +3133,18 @@ class FreeplayState extends MusicBeatSubState
         });
       }
     }
+  }
+
+  function updateFreeplayHintText()
+  {
+    #if FEATURE_TOUCH_CONTROLS
+    if (ControlsHandler.usingExternalInputDevice)
+      charSelectHint.text = 'Press [ ${controls.getDialogueNameFromControl(FREEPLAY_CHAR_SELECT, true)} ] to change characters';
+    else
+      charSelectHint.text = 'Tap the DJ to change characters';
+    #else
+    charSelectHint.text = 'Press [ ${controls.getDialogueNameFromControl(FREEPLAY_CHAR_SELECT, true)} ] to change characters';
+    #end
   }
 }
 
@@ -3336,22 +3335,22 @@ class FreeplaySongData
 
   /**
    * The default opponent for the song.
-   * Does the getter stuff for you depending on your current (or rather, rememberd) variation and difficulty.
+   * Does the getter stuff for you depending on your current (or rather, remembered) variation and difficulty.
    */
   public var songCharacter(get, never):String;
 
   /**
-   * The full song name, dynamically generated depending on your current (or rather, rememberd) variation and difficulty.
+   * The full song name, dynamically generated depending on your current (or rather, remembered) variation and difficulty.
    */
   public var fullSongName(get, never):String;
 
   /**
-   * The song's id and variation, combined with a colon. Dynamically generated depending on your current (or rather, rememberd) variation and difficulty.
+   * The song's id and variation, combined with a colon. Dynamically generated depending on your current (or rather, remembered) variation and difficulty.
    */
   public var idAndVariation(get, never):String;
 
   /**
-   * The starting BPM of the song, dynamically generated depending on your current (or rather, rememberd) variation and difficulty.
+   * The starting BPM of the song, dynamically generated depending on your current (or rather, remembered) variation and difficulty.
    */
   public var songStartingBpm(get, never):Float;
 

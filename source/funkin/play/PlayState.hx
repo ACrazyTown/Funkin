@@ -1167,7 +1167,7 @@ class PlayState extends MusicBeatSubState
       // Since the notes scrolling is dependant on the sound time that caused it to appear "stuttery" for some people
       // As a workaround for that, we lerp the conductor position to the music time to fill the gap in this lost precision making the scrolling smoother
       // The previous method where it "guessed" the song position based on the elapsed time had some flaws
-      // Somtimes the songPosition would exceed the music length causing issues in other places
+      // Sometimes the songPosition would exceed the music length causing issues in other places
       // And it was frame dependant which we don't like!!
       if (FlxG.sound.music.playing)
       {
@@ -1359,7 +1359,7 @@ class PlayState extends MusicBeatSubState
         final event = new PauseScriptEvent(false);
         dispatchEvent(event);
 
-        if (!event.eventCanceled) openPauseSubState(Conversation, camPause, lostFocus, () -> currentConversation?.pauseMusic());
+        if (!event.eventCanceled) openPauseSubState(Conversation, camPause, lostFocus, () -> currentConversation?.pause());
 
       case Cutscene:
         preparePauseUI();
@@ -1499,7 +1499,7 @@ class PlayState extends MusicBeatSubState
           dispatchEvent(eventEvent);
 
           // Calling event.cancelEvent() skips the event. Neat!
-          if (!eventEvent.eventCanceled && !shouldSubstatePause)
+          if (!eventEvent.eventCanceled)
           {
             SongEventRegistry.handleEvent(event);
           }
@@ -1687,7 +1687,7 @@ class PlayState extends MusicBeatSubState
 
       if (currentConversation != null)
       {
-        currentConversation.resumeMusic();
+        currentConversation.resume();
       }
 
       // Re-sync vocals.
@@ -2167,8 +2167,12 @@ class PlayState extends MusicBeatSubState
       }
       else
       {
-        discordRPCAlbum = 'album-${currentChart?.album}';
-        discordRPCIcon = 'icon-${currentCharacterData.opponent}';
+        var albumEntry:Null<funkin.ui.freeplay.Album> = funkin.data.freeplay.album.AlbumRegistry.instance.fetchEntry(currentChart?.album ?? '');
+        var album:Null<String> = albumEntry?.getDiscordRPCImage() ?? (currentChart?.album ?? '');
+        var icon:Null<String> = currentChart?.discordRPCImage ?? 'icon-${currentCharacterData.opponent}';
+
+        discordRPCAlbum = album;
+        discordRPCIcon = icon;
       }
       #end
     }
@@ -2724,7 +2728,7 @@ class PlayState extends MusicBeatSubState
     // Skip this if the music is paused (GameOver, Pause menu, start-of-song offset, etc.)
     if (!(FlxG.sound.music?.playing ?? false)) return;
 
-    var timeToPlayAt:Float = Math.min(FlxG.sound.music.length,
+    var timeToPlayAt:Float = Math.min(FlxG.sound.music.length - 1,
       Math.max(Math.min(Conductor.instance.combinedOffset, 0), Conductor.instance.songPosition) - Conductor.instance.combinedOffset);
     trace('Resyncing vocals to ${timeToPlayAt}');
 
@@ -3113,14 +3117,7 @@ class PlayState extends MusicBeatSubState
 
     // Get the offset and compensate for input latency.
     // Round inward (trim remainder) for consistency.
-    var diff:Float = Conductor.instance.songPosition - note.noteData.time;
-
-    var totalDiff:Float = diff;
-    if (diff < 0) totalDiff = diff + inputLatencyMs;
-    else
-      totalDiff = diff - inputLatencyMs;
-
-    var noteDiff:Int = Std.int(totalDiff);
+    var noteDiff:Int = Std.int(Conductor.instance.songPosition - note.noteData.time - inputLatencyMs);
 
     var score = Scoring.scoreNote(noteDiff, PBOT1);
     var daRating = Scoring.judgeNote(noteDiff, PBOT1);
@@ -3193,7 +3190,7 @@ class PlayState extends MusicBeatSubState
 
     if (playSound)
     {
-      var tempVocals:Bool = currentStage != null && currentStage.getBoyfriend().tempVocals;
+      var tempVocals:Bool = currentStage != null && currentStage.getBoyfriend()?.tempVocals;
       if (vocals != null && !tempVocals) vocals.playerVolume = 0;
       FunkinSound.playOnce(Paths.soundRandom('missnote', 1, 3), FlxG.random.float(0.5, 0.6));
     }
@@ -3235,7 +3232,7 @@ class PlayState extends MusicBeatSubState
 
     if (event.playSound)
     {
-      var tempVocals:Bool = currentStage != null && currentStage.getBoyfriend().tempVocals;
+      var tempVocals:Bool = currentStage != null && currentStage.getBoyfriend()?.tempVocals;
       if (vocals != null && !tempVocals) vocals.playerVolume = 0;
       FunkinSound.playOnce(Paths.soundRandom('missnote', 1, 3), FlxG.random.float(0.1, 0.2));
     }
@@ -3941,6 +3938,8 @@ class PlayState extends MusicBeatSubState
     FlxG.camera.follow(cameraFollowPoint, LOCKON, Constants.DEFAULT_CAMERA_FOLLOW_RATE);
     FlxG.camera.targetOffset.set();
 
+    if (shouldSubstatePause) FlxG.camera.followLerp = 0;
+
     if (resetZoom)
     {
       resetCameraZoom();
@@ -3989,6 +3988,12 @@ class PlayState extends MusicBeatSubState
           resetCamera(false, false); // Re-enable camera following when the tween is complete.
         }
       });
+
+      if (shouldSubstatePause)
+      {
+        cameraFollowTween.active = false;
+        cameraTweensPausedBySubState.add(cameraFollowTween);
+      }
     }
   }
 
@@ -4022,6 +4027,12 @@ class PlayState extends MusicBeatSubState
       // Zoom tween! Caching it so we can cancel/pause it later if needed.
       var adjustedDuration:Float = duration / playbackRate;
       cameraZoomTween = FlxTween.tween(this, {currentCameraZoom: targetZoom}, adjustedDuration, {ease: ease});
+
+      if (shouldSubstatePause)
+      {
+        cameraZoomTween.active = false;
+        cameraTweensPausedBySubState.add(cameraZoomTween);
+      }
     }
   }
 

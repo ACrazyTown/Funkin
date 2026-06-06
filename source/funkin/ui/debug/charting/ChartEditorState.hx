@@ -3129,7 +3129,7 @@ class ChartEditorState extends UIState // UIState derives from MusicBeatState
     buttonSelectOpponent.y = GRID_INITIAL_Y_POS - NOTE_SELECT_BUTTON_HEIGHT;
     buttonSelectOpponent.width = GRID_SIZE * 4;
     buttonSelectOpponent.height = NOTE_SELECT_BUTTON_HEIGHT;
-    buttonSelectOpponent.tooltip = 'Click to set selection to all notes on this side./nShift-click to add all notes on this side to selection.';
+    buttonSelectOpponent.tooltip = 'Click to set selection to all notes on this side.\nShift-click to add all notes on this side to selection.';
     buttonSelectOpponent.zIndex = 110;
     add(buttonSelectOpponent);
 
@@ -3154,7 +3154,7 @@ class ChartEditorState extends UIState // UIState derives from MusicBeatState
     buttonSelectPlayer.y = buttonSelectOpponent.y;
     buttonSelectPlayer.width = GRID_SIZE * 4;
     buttonSelectPlayer.height = NOTE_SELECT_BUTTON_HEIGHT;
-    buttonSelectPlayer.tooltip = 'Click to set selection to all notes on this side./nShift-click to add all notes on this side to selection.';
+    buttonSelectPlayer.tooltip = 'Click to set selection to all notes on this side.\nShift-click to add all notes on this side to selection.';
     buttonSelectPlayer.zIndex = 110;
     add(buttonSelectPlayer);
 
@@ -3180,7 +3180,7 @@ class ChartEditorState extends UIState // UIState derives from MusicBeatState
     buttonSelectEvent.y = buttonSelectPlayer.y;
     buttonSelectEvent.width = GRID_SIZE;
     buttonSelectEvent.height = NOTE_SELECT_BUTTON_HEIGHT;
-    buttonSelectEvent.tooltip = 'Click to set selection to all events./nShift-click to add all events to selection.';
+    buttonSelectEvent.tooltip = 'Click to set selection to all events.\nShift-click to add all events to selection.';
     buttonSelectEvent.zIndex = 110;
     add(buttonSelectEvent);
 
@@ -3286,13 +3286,28 @@ class ChartEditorState extends UIState // UIState derives from MusicBeatState
       if (currentWorkingFilePath != null)
       {
         this.exportAllSongData(true, currentWorkingFilePath);
+        this.success('Saved Chart', 'Chart saved successfully to ${currentWorkingFilePath}.');
       }
       else
       {
-        this.exportAllSongData(false, null);
+        this.exportAllSongData(false, null, function(path:String)
+        {
+          // CTRL + SHIFT + S Successful
+          this.success('Saved Chart', 'Chart saved successfully to ${path}.');
+        }, function()
+        {
+          // CTRL + SHIFT + S Cancelled
+        });
       }
     };
-    menubarItemSaveChartAs.onClick = _ -> this.exportAllSongData(false, null);
+    menubarItemSaveChartAs.onClick = _ -> this.exportAllSongData(false, null, function(path:String)
+    {
+      // CTRL + SHIFT + S Successful
+      this.success('Saved Chart', 'Chart saved successfully to ${path}.');
+    }, function()
+    {
+      // CTRL + SHIFT + S Cancelled
+    });
     menubarItemExit.onClick = _ -> quitChartEditor(true);
 
     // Edit
@@ -4436,9 +4451,9 @@ class ChartEditorState extends UIState // UIState derives from MusicBeatState
     }
 
     // Mouse Wheel = Scroll
-    if (FlxG.mouse.wheel != 0)
+    if (FlxG.mouse.deltaWheel.y != 0)
     {
-      scrollAmount = -50 * FlxG.mouse.wheel;
+      scrollAmount = -50 * FlxG.mouse.deltaWheel.y;
       shouldPause = true;
     }
 
@@ -5775,18 +5790,18 @@ class ChartEditorState extends UIState // UIState derives from MusicBeatState
     playbarHeadLayout.y = FlxG.height - 48 - 8;
 
     var songPos:Float = Conductor.instance.songPosition + Conductor.instance.instrumentalOffset;
-    var songPosMilliseconds:String = Std.string(Math.floor(Math.abs(songPos) % 1000)).lpad('0', 3).substr(0, 2);
-    var songPosSeconds:String = Std.string(Math.floor((Math.abs(songPos) / 1000) % 60)).lpad('0', 2);
-    var songPosMinutes:String = Std.string(Math.floor((Math.abs(songPos) / 1000) / 60)).lpad('0', 2);
+    var songPosMilliseconds:String = Std.string(Math.floor(Math.abs(songPos) % Constants.MS_PER_SEC)).lpad('0', 3).substr(0, 2);
+    var songPosSeconds:String = Std.string(Math.floor((Math.abs(songPos) / Constants.MS_PER_SEC) % Constants.SECS_PER_MIN)).lpad('0', 2);
+    var songPosMinutes:String = Std.string(Math.floor((Math.abs(songPos) / Constants.MS_PER_SEC) / Constants.SECS_PER_MIN)).lpad('0', 2);
     if (songPos < 0) songPosMinutes = '-' + songPosMinutes;
     var songPosString:String = '${songPosMinutes}:${songPosSeconds}.${songPosMilliseconds}';
 
     if (playbarSongPos.value != songPosString) playbarSongPos.value = songPosString;
 
     var songRemaining:Float = Math.max(songLengthInMs - songPos, 0.0);
-    var songRemainingMilliseconds:String = Std.string(Math.floor(Math.abs(songRemaining) % 1000)).lpad('0', 3).substr(0, 2);
-    var songRemainingSeconds:String = Std.string(Math.floor((songRemaining / 1000) % 60)).lpad('0', 2);
-    var songRemainingMinutes:String = Std.string(Math.floor((songRemaining / 1000) / 60)).lpad('0', 2);
+    var songRemainingMilliseconds:String = Std.string(Math.floor(Math.abs(songRemaining) % Constants.MS_PER_SEC)).lpad('0', 3).substr(0, 2);
+    var songRemainingSeconds:String = Std.string(Math.floor((songRemaining / Constants.MS_PER_SEC) % Constants.SECS_PER_MIN)).lpad('0', 2);
+    var songRemainingMinutes:String = Std.string(Math.floor((songRemaining / Constants.MS_PER_SEC) / Constants.SECS_PER_MIN)).lpad('0', 2);
     var songRemainingString:String = '-${songRemainingMinutes}:${songRemainingSeconds}.${songRemainingMilliseconds}';
 
     if (playbarSongRemaining.value != songRemainingString) playbarSongRemaining.value = songRemainingString;
@@ -6011,6 +6026,7 @@ class ChartEditorState extends UIState // UIState derives from MusicBeatState
       if (healthIconBF != null)
       {
         healthIconBF.configure(_charIconData?.healthIcon);
+        healthIconBF.iconOffset.set();
         healthIconBF.size *= 0.5; // Make the icon smaller in Chart Editor.
         healthIconBF.flipX = !healthIconBF.flipX; // BF faces the other way.
       }
@@ -6025,6 +6041,7 @@ class ChartEditorState extends UIState // UIState derives from MusicBeatState
       if (healthIconDad != null)
       {
         healthIconDad.configure(_charIconData?.healthIcon);
+        healthIconDad.iconOffset.set();
         healthIconDad.size *= 0.5; // Make the icon smaller in Chart Editor.
       }
       if (buttonSelectOpponent != null)
@@ -6523,9 +6540,13 @@ class ChartEditorState extends UIState // UIState derives from MusicBeatState
     var startTimestamp:Float = 0;
     if (playtestStartTime) startTimestamp = scrollPositionInMs + playheadPositionInMs;
 
-    var playbackRate:Float = ((menubarItemPlaybackSpeed.value / 100.0) ?? 0.5) * 2.0;
-    playbackRate = Math.round(playbackRate / 0.05) * 0.05; // Round to nearest 5%
-    playbackRate = playbackRate.clamp(0.05, 2.0); // Clamp to 5% to 200%
+    var playbackRate:Float = 1.0;
+    if (playtestAudioSettings)
+    {
+      playbackRate = ((menubarItemPlaybackSpeed.value / 100.0) ?? 0.5) * 2.0;
+      playbackRate = Math.round(playbackRate / 0.05) * 0.05; // Round to nearest 5%
+      playbackRate = playbackRate.clamp(0.05, 2.0); // Clamp to 5% to 200%
+    }
 
     var targetSong:Song;
     try
