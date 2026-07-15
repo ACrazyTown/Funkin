@@ -118,7 +118,7 @@ class FunkinSprite extends FlxAnimate
   /**
    * The filters array to be applied to the sprite.
    */
-  public var filters(default, set):Null<Array<BitmapFilter>> = null;
+  // public var filters(default, set):Null<Array<BitmapFilter>> = null;
 
   /**
    * @param x Starting X position
@@ -130,7 +130,7 @@ class FunkinSprite extends FlxAnimate
   {
     super(x, y);
 
-    filterRenderer = new FunkinFilterRenderer(this);
+    // filterRenderer = new FunkinFilterRenderer(this);
 
     if (path != null)
     {
@@ -782,32 +782,32 @@ class FunkinSprite extends FlxAnimate
     matrix.ty = Math.round(matrix.ty / this.scale.y) * this.scale.y;
   }
 
-  var filterRenderer:FunkinFilterRenderer;
+  // var filterRenderer:FunkinFilterRenderer;
   var filtered:Bool = false;
   var filterOffsets:Array<Float> = [0, 0];
 
   override function checkRenderTexture():Bool
   {
     // Forcefully enable render texture when we have filters.
-    if (filters != null && filters.length > 0) return true;
+    // if (filters != null && filters.length > 0) return true;
 
     return super.checkRenderTexture();
   }
 
-  function set_filters(value:Null<Array<BitmapFilter>>):Null<Array<BitmapFilter>>
-  {
-    if (filters != value) _renderTextureDirty = true;
-    filters = value;
-    return value;
-  }
+  // function set_filters(value:Null<Array<BitmapFilter>>):Null<Array<BitmapFilter>>
+  // {
+  //   if (filters != value) _renderTextureDirty = true;
+  //   filters = value;
+  //   return value;
+  // }
 
   override public function draw():Void
   {
-    for (filter in filters ?? [])
-    {
-      @:privateAccess
-      if (filter.__renderDirty) _renderTextureDirty = true;
-    }
+    // for (filter in filters ?? [])
+    // {
+    //   @:privateAccess
+    //   if (filter.__renderDirty) _renderTextureDirty = true;
+    // }
 
     super.draw();
   }
@@ -835,16 +835,16 @@ class FunkinSprite extends FlxAnimate
 
         _renderTexture.render();
 
-        filterRenderer.applyFilters();
+        // filterRenderer.applyFilters();
         _renderTextureDirty = false;
       }
 
-      if (filtered)
-      {
-        matrix.translate(filterOffsets[0], filterOffsets[1]);
-        camera.drawPixels(filterRenderer.graphic?.imageFrame.frame, null, matrix, colorTransform, blend, antialiasing, shader);
-      }
-      else
+      // if (filtered)
+      // {
+      //   matrix.translate(filterOffsets[0], filterOffsets[1]);
+      //   camera.drawPixels(filterRenderer.graphic?.imageFrame.frame, null, matrix, colorTransform, blend, antialiasing, shader);
+      // }
+      // else
       {
         camera.drawPixels(_renderTexture.graphic.imageFrame.frame, framePixels, matrix, colorTransform, blend, antialiasing, shader);
       }
@@ -894,16 +894,16 @@ class FunkinSprite extends FlxAnimate
         });
         _renderTexture.render();
 
-        filterRenderer.applyFilters();
+        // filterRenderer.applyFilters();
         _renderTextureDirty = false;
       }
 
-      if (filtered)
-      {
-        matrix.translate(filterOffsets[0], filterOffsets[1]);
-        camera.drawPixels(filterRenderer.graphic?.imageFrame.frame, null, matrix, colorTransform, blend, antialiasing, shader);
-      }
-      else
+      // if (filtered)
+      // {
+      //   matrix.translate(filterOffsets[0], filterOffsets[1]);
+      //   camera.drawPixels(filterRenderer.graphic?.imageFrame.frame, null, matrix, colorTransform, blend, antialiasing, shader);
+      // }
+      // else
       {
         camera.drawPixels(_renderTexture.graphic.imageFrame.frame, framePixels, matrix, colorTransform, blend, antialiasing, shader);
       }
@@ -919,7 +919,7 @@ class FunkinSprite extends FlxAnimate
   {
     @:nullSafety(Off) // TODO: Remove when flixel.FlxSprite is null safed.
     frames = null;
-    filterRenderer.destroy();
+    // filterRenderer.destroy();
     // Cancel all tweens so they don't continue to run on a destroyed sprite.
     // This prevents crashes.
     FlxTween.cancelTweensOf(this);

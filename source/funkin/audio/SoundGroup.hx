@@ -36,7 +36,7 @@ class SoundGroup extends FlxTypedGroup<FunkinSound>
     @:nullSafety(Off)
     for (sndFile in files)
     {
-      var snd:FunkinSound = FunkinSound.load(Paths.voices(song, '$sndFile'));
+      var snd:FunkinSound = FunkinSound._load(Paths.voices(song, '$sndFile'));
       result.add(snd); // adds it to main group for other shit
     }
 

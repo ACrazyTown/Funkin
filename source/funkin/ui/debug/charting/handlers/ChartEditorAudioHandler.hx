@@ -164,7 +164,7 @@ class ChartEditorAudioHandler
     state.audioInstTrack = instTrack;
     state.postLoadInstrumental();
     // Workaround for a bug where FlxG.sound.music.update() was being called twice.
-    FlxG.sound.list.remove(instTrack);
+    // FlxG.sound.list.remove(instTrack);
     return true;
   }
 
@@ -278,7 +278,7 @@ class ChartEditorAudioHandler
       trace('WARN: Failed to play sound $path, asset not found.');
       return;
     }
-    var snd:Null<FunkinSound> = FunkinSound.load(asset);
+    var snd:Null<FunkinSound> = FunkinSound._load(asset);
     if (snd == null) return;
     snd.autoDestroy = true;
     snd.play(true);
@@ -295,7 +295,7 @@ class ChartEditorAudioHandler
   {
     if (state.stretchySounds)
     {
-      if (state.stretchySound1 == null) state.stretchySound1 = FunkinSound.load(Paths.sound('chartingSounds/stretch1_UI'));
+      if (state.stretchySound1 == null) state.stretchySound1 = FunkinSound._load(Paths.sound('chartingSounds/stretch1_UI'));
       if (state.stretchySound1 == null) return;
 
       // Prevent spam playing that could cause issues.
@@ -307,7 +307,7 @@ class ChartEditorAudioHandler
     }
     else
     {
-      if (state.stretchySound2 == null) state.stretchySound2 = FunkinSound.load(Paths.sound('chartingSounds/stretch2_UI'));
+      if (state.stretchySound2 == null) state.stretchySound2 = FunkinSound._load(Paths.sound('chartingSounds/stretch2_UI'));
       if (state.stretchySound2 == null) return;
 
       // Prevent spam playing that could cause issues.

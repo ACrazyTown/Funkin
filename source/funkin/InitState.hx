@@ -174,6 +174,9 @@ class InitState extends FlxState
       // FLIXEL TRANSITIONS
       //
 
+      // [RENDER OVERHAUL] FlxGraphic.fromClass loads async on HTML5 and as a result causes FlxTexture to not initialize properly.
+      // Disable transitions for now?
+      #if !html5
       // Diamond Transition
       var diamond:FlxGraphic = FlxGraphic.fromClass(GraphicTransTileDiamond);
       diamond.persist = true;
@@ -194,6 +197,7 @@ class InitState extends FlxState
         FlxTransitionableState.defaultTransOut = new TransitionData(FADE, FlxColor.BLACK, 0.7, new FlxPoint(0, 1), tileData,
           new FlxRect(-200, -200, FlxG.width * 1.4, FlxG.height * 1.4));
       });
+      #end
 
       // SDL for some reason enables VSync on focus lost/gained in Android
       // Since we don't really need VSync on Android we're gonna forcefully disable it on these signals for now

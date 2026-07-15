@@ -34,7 +34,7 @@ class WaveformTestState extends MusicBeatState
     testSprite.clipRect = new FlxRect(0, 0, FlxG.width, FlxG.height);
     // add(testSprite);
 
-    waveformAudio = FunkinSound.load(Paths.inst('bopeebo', '-erect'));
+    waveformAudio = FunkinSound._load(Paths.inst('bopeebo', '-erect'));
 
     waveformData = WaveformDataParser.interpretFlxSound(waveformAudio);
 

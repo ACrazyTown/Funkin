@@ -34,55 +34,55 @@ class FunkinFilterRenderer implements IFlxDestroyable
    */
   public function applyFilters():Void
   {
-    parent.filtered = false;
-    if (parent.filters == null || parent.filters.length < 1) return;
+    // parent.filtered = false;
+    // if (parent.filters == null || parent.filters.length < 1) return;
 
-    var textureBitmap:BitmapData = parent._renderTexture.graphic.bitmap;
+    // var textureBitmap:BitmapData = parent._renderTexture.graphic.bitmap;
 
-    var bounds:FlxRect = FlxRect.get().copyFromFlash(textureBitmap.rect);
-    FilterRenderer.expandFilterBounds(bounds, parent.filters);
-    parent.filterOffsets = [bounds.x * parent.scale.x, bounds.y * parent.scale.x];
+    // var bounds:FlxRect = FlxRect.get().copyFromFlash(textureBitmap.rect);
+    // FilterRenderer.expandFilterBounds(bounds, parent.filters);
+    // parent.filterOffsets = [bounds.x * parent.scale.x, bounds.y * parent.scale.x];
 
-    var ceilWidth:Int = Math.ceil(bounds.width);
-    var ceilHeight:Int = Math.ceil(bounds.height);
+    // var ceilWidth:Int = Math.ceil(bounds.width);
+    // var ceilHeight:Int = Math.ceil(bounds.height);
 
-    if (graphic != null) putBitmap(graphic.bitmap);
-    var bitmap:BitmapData = getBitmap(ceilWidth, ceilHeight);
+    // if (graphic != null) putBitmap(graphic.bitmap);
+    // var bitmap:BitmapData = getBitmap(ceilWidth, ceilHeight);
 
-    if (graphic == null)
-    {
-      graphic = FlxGraphic.fromBitmapData(bitmap, false, null, false);
-    }
-    else
-    {
-      graphic.bitmap = bitmap;
-      graphic.imageFrame.frame.frame.set(0, 0, bitmap.width, bitmap.height);
-    }
+    // if (graphic == null)
+    // {
+    //   graphic = FlxGraphic.fromBitmapData(bitmap, false, null, false);
+    // }
+    // else
+    // {
+    //   graphic.bitmap = bitmap;
+    //   graphic.imageFrame.frame.frame.set(0, 0, bitmap.width, bitmap.height);
+    // }
 
-    var filterBmp1:Null<BitmapData> = null;
-    var filterBmp2:Null<BitmapData> = null;
+    // var filterBmp1:Null<BitmapData> = null;
+    // var filterBmp2:Null<BitmapData> = null;
 
-    var needsSecondBitmap:Bool = false;
-    var needsPreserveObject:Bool = false;
-    for (filter in parent.filters)
-    {
-      if (filter != null)
-      {
-        if (filter.__needSecondBitmapData) needsSecondBitmap = true;
-        if (filter.__preserveObject) needsPreserveObject = true;
-      }
-    }
+    // var needsSecondBitmap:Bool = false;
+    // var needsPreserveObject:Bool = false;
+    // for (filter in parent.filters)
+    // {
+    //   if (filter != null)
+    //   {
+    //     if (filter.__needSecondBitmapData) needsSecondBitmap = true;
+    //     if (filter.__preserveObject) needsPreserveObject = true;
+    //   }
+    // }
 
-    if (needsSecondBitmap) filterBmp1 = getBitmap(graphic.width, graphic.height);
-    if (needsPreserveObject) filterBmp2 = getBitmap(filterBmp1?.width ?? 1, filterBmp1?.height ?? 1);
+    // if (needsSecondBitmap) filterBmp1 = getBitmap(graphic.width, graphic.height);
+    // if (needsPreserveObject) filterBmp2 = getBitmap(filterBmp1?.width ?? 1, filterBmp1?.height ?? 1);
 
-    _applyFilters(graphic.bitmap, textureBitmap, parent.filters, filterBmp1, filterBmp2, bounds);
+    // _applyFilters(graphic.bitmap, textureBitmap, parent.filters, filterBmp1, filterBmp2, bounds);
 
-    if (filterBmp1 != null) putBitmap(filterBmp1);
-    if (filterBmp2 != null) putBitmap(filterBmp2);
+    // if (filterBmp1 != null) putBitmap(filterBmp1);
+    // if (filterBmp2 != null) putBitmap(filterBmp2);
 
-    bounds.put();
-    parent.filtered = true;
+    // bounds.put();
+    // parent.filtered = true;
   }
 
   function _applyFilters(target:BitmapData, bmp:BitmapData, filters:Array<BitmapFilter>, target1:Null<BitmapData>, target2:Null<BitmapData>,

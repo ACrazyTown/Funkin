@@ -14,7 +14,7 @@ import lime.app.Promise;
  * Handles caching of textures and sounds for the game.
  * I did this hello, this can be improved later on and I have ideas on how, but for now this functions well enough. -Zack
  */
-@:nullSafety
+@:nullSafety(Off)
 class FunkinMemory
 {
   static var permanentCachedTextures:Map<String, FlxGraphic> = [];

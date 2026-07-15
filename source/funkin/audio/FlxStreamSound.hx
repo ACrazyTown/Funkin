@@ -27,16 +27,16 @@ class FlxStreamSound extends FlxSound
 
     if ((EmbeddedSound is Sound))
     {
-      _sound = EmbeddedSound;
+      _sound = cast EmbeddedSound;
     }
     else if ((EmbeddedSound is Class))
     {
-      _sound = Type.createInstance(EmbeddedSound, []);
+      _sound = Type.createInstance(cast EmbeddedSound, []);
     }
     else if ((EmbeddedSound is String))
     {
-      if (Assets.exists(EmbeddedSound, AssetType.SOUND)
-        || Assets.exists(EmbeddedSound, AssetType.MUSIC)) _sound = Assets.getMusic(EmbeddedSound);
+      if (Assets.exists(cast EmbeddedSound, AssetType.SOUND)
+        || Assets.exists(cast EmbeddedSound, AssetType.MUSIC)) _sound = Assets.getMusic(cast EmbeddedSound);
       else
         FlxG.log.error('Could not find a Sound asset with an ID of \'$EmbeddedSound\'.');
     }

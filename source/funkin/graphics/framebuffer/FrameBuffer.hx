@@ -12,6 +12,7 @@ import openfl.geom.Rectangle;
 /**
  * A single frame buffer. Used by `FrameBufferManager`.
  */
+@:nullSafety(Off)
 class FrameBuffer
 {
   /**

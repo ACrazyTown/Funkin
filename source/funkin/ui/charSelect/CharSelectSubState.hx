@@ -997,7 +997,7 @@ class CharSelectSubState extends MusicBeatSubState
 
       var refFrame = bopInfo.frames[bopInfo.frames.length - 1];
       var curFrame = bopInfo.frames[bopFr];
-      if (bopFr >= 13) icon.filters = selectedBizz;
+      // if (bopFr >= 13) icon.filters = selectedBizz;
 
       var scaleXDiff:Float = curFrame.scaleX - refFrame.scaleX;
       var scaleYDiff:Float = curFrame.scaleY - refFrame.scaleY;
@@ -1089,7 +1089,7 @@ class CharSelectSubState extends MusicBeatSubState
             }
             else
             {
-              memb.filters = selectedBizz;
+              // memb.filters = selectedBizz;
               memb.scale.set(2.6, 2.6);
             }
             if (pressedSelect && memb.animation.curAnim?.name == 'idle') memb.animation.play('confirm');
@@ -1109,7 +1109,7 @@ class CharSelectSubState extends MusicBeatSubState
           }
           else
           {
-            memb.filters = null;
+            // memb.filters = null;
             memb.scale.set(2, 2);
           }
       }

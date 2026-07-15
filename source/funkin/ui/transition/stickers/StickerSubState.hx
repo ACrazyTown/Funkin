@@ -277,63 +277,63 @@ class StickerTransitionSprite extends openfl.display.Sprite
   public function new():Void
   {
     super();
-    visible = false;
-    stickersCamera = new FlxCamera();
-    stickersCamera.bgColor = 0x00000000;
-    addChild(stickersCamera.flashSprite);
-    FlxG.signals.gameResized.add((_, _) -> this.onResize());
-    scrollRect = new openfl.geom.Rectangle();
-    onResize();
+    // visible = false;
+    // stickersCamera = new FlxCamera();
+    // stickersCamera.bgColor = 0x00000000;
+    // addChild(stickersCamera.flashSprite);
+    // FlxG.signals.gameResized.add((_, _) -> this.onResize());
+    // scrollRect = new openfl.geom.Rectangle();
+    // onResize();
   }
 
   public function update(elapsed:Float):Void
   {
-    stickersCamera.visible = visible;
-    if (!visible) return;
-    grpStickers?.update(elapsed);
-    stickersCamera.update(elapsed);
+    // stickersCamera.visible = visible;
+    // if (!visible) return;
+    // grpStickers?.update(elapsed);
+    // stickersCamera.update(elapsed);
 
-    stickersCamera?.clearDrawStack();
-    stickersCamera?.canvas?.graphics.clear();
+    // stickersCamera?.clearDrawStack();
+    // stickersCamera?.canvas?.graphics.clear();
 
-    grpStickers?.draw();
+    // grpStickers?.draw();
 
-    stickersCamera.render();
+    // stickersCamera.render();
   }
 
   public function insert():Void
   {
-    FlxG.addChildBelowMouse(this, 1);
+    // FlxG.addChildBelowMouse(this, 1);
 
-    visible = true;
-    onResize();
+    // visible = true;
+    // onResize();
   }
 
   public function clear():Void
   {
-    FlxG.removeChild(this);
-    visible = false;
-    grpStickers = null;
-    stickersCamera?.clearDrawStack();
-    stickersCamera?.canvas?.graphics.clear();
+    // FlxG.removeChild(this);
+    // visible = false;
+    // grpStickers = null;
+    // stickersCamera?.clearDrawStack();
+    // stickersCamera?.canvas?.graphics.clear();
   }
 
   public function onResize():Void
   {
-    x = y = 0;
-    scaleX = 1;
-    scaleY = 1;
+    // x = y = 0;
+    // scaleX = 1;
+    // scaleY = 1;
 
-    // Adjusting camera and container cropping to the game resolution
-    __scrollRect.setTo(0, 0, FlxG.camera._scrollRect.scrollRect.width, FlxG.camera._scrollRect.scrollRect.height);
+    // // Adjusting camera and container cropping to the game resolution
+    // __scrollRect.setTo(0, 0, FlxG.camera._scrollRect.scrollRect.width, FlxG.camera._scrollRect.scrollRect.height);
 
-    stickersCamera.onResize();
-    stickersCamera._scrollRect.scrollRect = scrollRect;
+    // stickersCamera.onResize();
+    // stickersCamera._scrollRect.scrollRect = scrollRect;
   }
 
   public function setupStickers(group:FlxTypedGroup<StickerSprite>):Void
   {
-    grpStickers = group;
-    grpStickers.camera = stickersCamera;
+    // grpStickers = group;
+    // grpStickers.camera = stickersCamera;
   }
 }

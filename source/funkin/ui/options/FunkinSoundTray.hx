@@ -65,9 +65,9 @@ class FunkinSoundTray extends FlxSoundTray
     screenCenter();
     y = -height - 10;
 
-    volumeUpSound = Paths.sound("soundtray/Volup");
-    volumeDownSound = Paths.sound("soundtray/Voldown");
-    volumeMaxSound = Paths.sound("soundtray/VolMAX");
+    volumeUpSound = cast Paths.sound("soundtray/Volup");
+    volumeDownSound = cast Paths.sound("soundtray/Voldown");
+    volumeMaxSound = cast Paths.sound("soundtray/VolMAX");
   }
 
   override public function update(ms:Float):Void
@@ -124,7 +124,7 @@ class FunkinSoundTray extends FlxSoundTray
     if (!silent)
     {
       // This is a String currently, but there is or was a Flixel PR to change this to a FlxSound or a Sound bject
-      var sound:Null<String> = FlxG.sound.volume == 1 ? volumeMaxSound : (up ? volumeUpSound : volumeDownSound);
+      var sound:Null<String> = cast FlxG.sound.volume == 1 ? volumeMaxSound : (up ? volumeUpSound : volumeDownSound);
       if (sound != null) FlxG.sound.play(sound);
     }
   }
